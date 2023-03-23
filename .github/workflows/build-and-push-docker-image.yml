@@ -23,4 +23,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: lariatdata/install-aws-base:latest
+          tags: |
+            lariatdata/install-aws-base:latest
+            lariatdata/install-aws-base:${{ github.sha }}
