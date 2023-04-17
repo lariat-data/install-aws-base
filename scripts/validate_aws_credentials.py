@@ -1,7 +1,7 @@
 import boto3
 import os
 import sys
-from botocore.exceptions import ClientError
+from botocore.exceptions import NoCredentialsError, ClientError
 
 def validate_aws_credentials(credentials, account_id):
     try:
@@ -9,13 +9,13 @@ def validate_aws_credentials(credentials, account_id):
               aws_access_key_id=credentials["aws_access_key_id"],
               aws_secret_access_key=credentials["aws_secret_access_key"],
               aws_session_token=credentials.get("aws_session_token"))
-    except (ClientError, KeyError):
+    except (ClientError, NoCredentialsError, KeyError):
         return False
 
     # Get the caller identity from the STS client
     try:
         caller_identity = sts_client.get_caller_identity()
-    except ClientError:
+    except (ClientError, NoCredentialsError):
         return False
 
     # Check if the caller account ID matches the specified account ID
